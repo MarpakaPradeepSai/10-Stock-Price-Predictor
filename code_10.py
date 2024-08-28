@@ -13,7 +13,7 @@ model_files = {
     'NVDA': 'NVIDIA_LSTM_5(1.38).h5',
     'AMZN': 'AMAZON_LSTM_5(2.90).h5',
     'AAPL': 'APPLE_LSTM_10(2.05).h5',
-    'NFLX': 'NETFLIX_LSTM_5(11.92).h5',
+    'NFLX': 'NETFLIX_LSTM_5(12.00).h5',
     'META': 'META_LSTM_5(8.12).h5',
     'TSLA': 'TESLA_LSTM_30(8.98).h5',
     'IBM': 'IBM_LSTM_5(1.59).h5',
