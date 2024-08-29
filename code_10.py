@@ -13,7 +13,7 @@ model_files = {
     'NVDA': 'NVIDIA_LSTM_5(1.38).h5',
     'AMZN': 'AMAZON_LSTM_5(2.90).h5',
     'AAPL': 'APPLE_LSTM_10(2.05).h5',
-    'ORCL': 'ORACLE_LSTM_10(1.75).h5',
+    'NFLX': 'NETFLIX_LSTM_10(12.04).h5',
     'META': 'META_LSTM_5(8.12).h5',
     'TSLA': 'TESLA_LSTM_30(8.98).h5',
     'IBM': 'IBM_LSTM_5(1.59).h5',
@@ -27,7 +27,7 @@ look_back_periods = {
     'NVDA': 5,
     'AMZN': 5,
     'AAPL': 10,
-    'ORCL': 10,
+    'NFLX': 10,
     'META': 5,
     'TSLA': 30,
     'IBM': 5,
@@ -41,7 +41,7 @@ logo_urls = {
     'NVDA': 'https://1000logos.net/wp-content/uploads/2017/05/Color-NVIDIA-Logo.jpg',
     'AMZN': 'https://1000logos.net/wp-content/uploads/2016/10/Amazon-logo-meaning.jpg',
     'AAPL': 'https://companiesmarketcap.com/img/company-logos/64/AAPL.webp',
-    'ORCL': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Oracle_logo.svg/1920px-Oracle_logo.svg.png',
+    'NFLX': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Netflix_icon.svg/2048px-Netflix_icon.svg.png',
     'META': 'https://1000logos.net/wp-content/uploads/2021/10/logo-Meta.png',
     'TSLA': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Tesla_logo.png/900px-Tesla_logo.png',
     'IBM': 'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg',
@@ -116,9 +116,9 @@ def display_logos():
             st.session_state.selected_stock = 'AAPL'
         st.image(logo_urls['AAPL'], width=50)
     with cols[3]:
-        if st.button("Oracle", key='ORCL_button'):  # Changed from Netflix to Oracle
-            st.session_state.selected_stock = 'ORCL'
-        st.image(logo_urls['ORCL'], width=50)  # Changed from Netflix to Oracle
+        if st.button("Netflix", key='NFLX_button'):
+            st.session_state.selected_stock = 'NFLX'
+        st.image(logo_urls['NFLX'], width=50)
     
     st.markdown("<br>", unsafe_allow_html=True)  # Add a gap between rows
 
@@ -180,7 +180,7 @@ else:
         div.stButton > button#forecast-button:focus,
         div.stButton > button#forecast-button:hover,
         div.stButton > button#forecast-button:active {
-                        color: white; /* Keep text white on hover, focus, and active states for the Forecast button */
+            color: white; /* Keep text white on hover, focus, and active states for the Forecast button */
             outline: 2px solid green; /* Green outline for the clicked button */
         }
 
