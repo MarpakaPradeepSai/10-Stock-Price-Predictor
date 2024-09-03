@@ -92,7 +92,7 @@ def predict_next_business_days(model, data, look_back=30, days=5):
     return predictions
 
 # Streamlit app layout
-st.markdown("<h1 style='text-align: center; font-size: 44px;'>Stock-Price-Predictor 📈📉💰</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; font-size: 44px;'>Stock-Price-Predictor </h1>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)  # Add a gap between rows
 
 # Initialize stock selection in session state
@@ -206,9 +206,9 @@ else:
         close_prices = stock_data['Close'].values.reshape(-1, 1)
         dates = stock_data.index
 
-        # Display the historical data
+        # Display the historical data (with expanded dataframe)
         st.markdown(f"### Historical Data for {stock}")
-        st.dataframe(stock_data)
+        st.dataframe(stock_data, width=1000, height=400)  # Set width and height
 
         # Get the appropriate model and look-back period
         model_lstm = models.get(stock)
@@ -260,4 +260,4 @@ else:
                 'Predicted Price': predictions.flatten()
             })
             st.markdown(f"##### Predicted Stock Prices for the Next {num_days} Business Days ({stock})")
-            st.table(prediction_df)
+            st.table(prediction_df, width=1000, height=400)  # Set width and height
