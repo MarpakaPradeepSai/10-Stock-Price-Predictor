@@ -169,95 +169,41 @@ else:
     current_date = datetime.now().strftime('%Y-%m-%d')
     st.write(f"Current Date: {current_date}")
 
-    # Apply custom CSS to change button colors and add green outline when clicked
-    st.markdown(
-        """
-        <style>
-        div.stButton > button#forecast-button {
-            background-color: green; /* Green color for the Forecast button */
-            color: white;
-        }
-        div.stButton > button#forecast-button:focus,
-        div.stButton > button#forecast-button:hover,
-        div.stButton > button#forecast-button:active {
-            color: white; /* Keep text white on hover, focus, and active states for the Forecast button */
-            outline: 2px solid green; /* Green outline for the clicked button */
-        }
+    # Load stock data
+    stock_data = get_stock_data(stock)
+    close_prices = stock_data['Close'].values.reshape(-1, 1)
+    dates = stock_data.index
 
-        div.stButton > button:not(#forecast-button) {
-            background-color: red; /* Red color for all other buttons */
-            color: white;
-        }
-        div.stButton > button:not(#forecast-button):focus,
-        div.stButton > button:not(#forecast-button):hover,
-        div.stButton > button:not(#forecast-button):active {
-            color: white; /* Keep text white on hover, focus, and active states for the other buttons */
-            outline: 2px solid green; /* Green outline for the clicked button */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    # Display the historical data
+    st.markdown(f"### Historical Data for {stock}")
+    st.dataframe(stock_data)
 
-    # Use unique key for the "Forecast" button
-    if st.button(f'Predict Next {num_days} Days Stock Prices for {stock}', key='forecast-button'):
-        # Load stock data
-        stock_data = get_stock_data(stock)
-        close_prices = stock_data['Close'].values.reshape(-1, 1)
-        dates = stock_data.index
+    # Predict the next num_days business days
+    look_back = look_back_periods[stock]
+    predictions = predict_next_business_days(models[stock], close_prices, look_back=look_back, days=num_days)
+    
+    # Create dates for the predictions
+    last_date = dates[-1]
+    prediction_dates = generate_business_days(last_date + timedelta(days=1), num_days)
+    
+    # Prepare data for plotting the historical and predicted prices
+    fig, ax = plt.subplots()
+    ax.plot(dates, close_prices, label='Historical Prices')
+    ax.plot(prediction_dates, predictions, label='Predicted Prices', linestyle='--', color='red')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Close Price')
+    ax.legend()
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 
-        # Display the historical data
-        st.markdown(f"### Historical Data for {stock}")
-        st.dataframe(stock_data)
+    # Display the prediction plot
+    st.markdown(f"### Predicted Stock Prices for {stock}")
+    st.pyplot(fig)
 
-        # Get the appropriate model and look-back period
-        model_lstm = models.get(stock)
-        if model_lstm is None:
-            st.error(f"No model found for {stock}")
-        else:
-            look_back = look_back_periods.get(stock, 30)
-
-            # Predict the next num_days business days
-            predictions = predict_next_business_days(model_lstm, close_prices, look_back=look_back, days=num_days)
-            
-            # Create dates for the predictions
-            last_date = dates[-1]
-            prediction_dates = generate_business_days(last_date + timedelta(days=1), num_days)
-            
-            # Prepare data for plotting the historical and predicted prices
-            fig, ax = plt.subplots()
-            ax.plot(dates, close_prices, label='Historical Prices')
-            ax.plot(prediction_dates, predictions, label='Predicted Prices', linestyle='--', color='red')
-            ax.set_xlabel('Date')
-            ax.set_ylabel('Price')
-            ax.set_title(f'{stock} Stock Prices', fontsize=10, fontweight='bold')
-            ax.legend()
-
-            st.pyplot(fig)
-
-            st.write(" ")
-            
-            # Plot only the predicted stock prices
-            fig2, ax2 = plt.subplots()
-            ax2.plot(prediction_dates, predictions, marker='o', color='blue')
-            ax2.set_xlabel('Date')
-            ax2.set_ylabel('Predicted Price')
-            ax2.set_title(f'Predicted Stock Prices for the Next {num_days} Business Days ({stock})', fontsize=10, fontweight='bold')
-            
-            # Use DayLocator to specify spacing of tick marks and set the format for the date labels
-            ax2.xaxis.set_major_locator(mdates.DayLocator(interval=1))
-            ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-            
-            plt.xticks(rotation=45)
-            
-            st.pyplot(fig2)
-            
-            st.write(" ")
-            
-            # Show predictions in a table format
-            prediction_df = pd.DataFrame({
-                'Date': prediction_dates,
-                'Predicted Price': predictions.flatten()
-            })
-            st.markdown(f"##### Predicted Stock Prices for the Next {num_days} Business Days ({stock})")
-            st.table(prediction_df)
+    # Display the predictions
+    predictions_df = pd.DataFrame({
+        'Date': prediction_dates,
+        'Predicted Close Price': predictions.flatten()
+    })
+    st.markdown("### Prediction Data")
+    st.dataframe(predictions_df)
