@@ -208,7 +208,7 @@ else:
 
         # Display the historical data with increased height
         st.markdown(f"### Historical Data for {stock}")
-        st.dataframe(stock_data, height=400)  # Increased height for better visibility
+        st.dataframe(stock_data, height=400, width = 1000)  # Increased height for better visibility
 
         # Get the appropriate model and look-back period
         model_lstm = models.get(stock)
