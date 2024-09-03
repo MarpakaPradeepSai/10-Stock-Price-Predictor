@@ -260,4 +260,4 @@ else:
                 'Predicted Price': predictions.flatten()
             })
             st.markdown(f"<h5 style='text-align: center;'>Predicted Stock Prices for the Next {num_days} Business Days ({stock})</h5>", unsafe_allow_html=True)
-            st.dataframe(prediction_df, height=400, width=800)  # Increased height for better visibility
+            st.dataframe(prediction_df, width=800)  # Increased height for better visibility
