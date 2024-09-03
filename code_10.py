@@ -162,6 +162,18 @@ stock = st.session_state.selected_stock
 if stock is None:
     st.error("Please select a stock.")
 else:
+    # Center the selected stock's logo image
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center;">
+            <img src="{logo_urls[stock]}" width="150">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)  # Add a gap between rows
+
     # User input for number of business days to forecast
     num_days = st.slider("Select number of business days to forecast", min_value=1, max_value=30, value=5)
 
@@ -203,17 +215,12 @@ else:
     if st.button(f'Predict Next {num_days} Days Stock Prices for {stock}', key='forecast-button'):
         # Load stock data
         stock_data = get_stock_data(stock)
-
-        # Ensure stock_data is a DataFrame (it might be a Series if only one column is returned)
-        if not isinstance(stock_data, pd.DataFrame):
-            stock_data = stock_data.to_frame()
-
         close_prices = stock_data['Close'].values.reshape(-1, 1)
         dates = stock_data.index
 
         # Display the historical data
         st.markdown(f"### Historical Data for {stock}")
-        st.dataframe(stock_data)  # Display the DataFrame directly
+        st.dataframe(stock_data)
 
         # Get the appropriate model and look-back period
         model_lstm = models.get(stock)
