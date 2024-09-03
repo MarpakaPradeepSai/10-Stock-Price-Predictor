@@ -260,4 +260,4 @@ else:
                 'Predicted Price': predictions.flatten()
             })
             st.markdown(f"##### Predicted Stock Prices for the Next {num_days} Business Days ({stock})")
-            st.dataframe(prediction_df, height=400, width = 1000)  # Increased height for better visibility
+            st.dataframe(prediction_df, height=400, width = 800)  # Increased height for better visibility
