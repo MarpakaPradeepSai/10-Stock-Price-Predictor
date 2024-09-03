@@ -206,9 +206,9 @@ else:
         close_prices = stock_data['Close'].values.reshape(-1, 1)
         dates = stock_data.index
 
-        # Display the historical data with increased height
-        st.markdown(f"### Historical Data for {stock}")
-        st.dataframe(stock_data, height=400, width = 1000)  # Increased height for better visibility
+        # Display the historical data with increased height and centered heading
+        st.markdown(f"<h3 style='text-align: center;'>Historical Data for {stock}</h3>", unsafe_allow_html=True)
+        st.dataframe(stock_data, height=400, width=1000)  # Increased height for better visibility
 
         # Get the appropriate model and look-back period
         model_lstm = models.get(stock)
@@ -254,10 +254,10 @@ else:
             
             st.write(" ")
             
-            # Show predictions in a table format with increased height
+            # Show predictions in a table format with increased height and centered heading
             prediction_df = pd.DataFrame({
                 'Date': prediction_dates,
                 'Predicted Price': predictions.flatten()
             })
-            st.markdown(f"##### Predicted Stock Prices for the Next {num_days} Business Days ({stock})")
-            st.dataframe(prediction_df, height=400, width = 800)  # Increased height for better visibility
+            st.markdown(f"<h5 style='text-align: center;'>Predicted Stock Prices for the Next {num_days} Business Days ({stock})</h5>", unsafe_allow_html=True)
+            st.dataframe(prediction_df, height=400, width=800)  # Increased height for better visibility
