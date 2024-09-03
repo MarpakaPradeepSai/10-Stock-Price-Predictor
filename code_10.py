@@ -162,18 +162,6 @@ stock = st.session_state.selected_stock
 if stock is None:
     st.error("Please select a stock.")
 else:
-    # Center the selected stock's logo image
-    st.markdown(
-        f"""
-        <div style="display: flex; justify-content: center;">
-            <img src="{logo_urls[stock]}" width="150">
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("<br>", unsafe_allow_html=True)  # Add a gap between rows
-
     # User input for number of business days to forecast
     num_days = st.slider("Select number of business days to forecast", min_value=1, max_value=30, value=5)
 
