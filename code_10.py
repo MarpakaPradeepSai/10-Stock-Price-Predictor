@@ -203,12 +203,17 @@ else:
     if st.button(f'Predict Next {num_days} Days Stock Prices for {stock}', key='forecast-button'):
         # Load stock data
         stock_data = get_stock_data(stock)
+
+        # Ensure stock_data is a DataFrame (it might be a Series if only one column is returned)
+        if not isinstance(stock_data, pd.DataFrame):
+            stock_data = stock_data.to_frame()
+
         close_prices = stock_data['Close'].values.reshape(-1, 1)
         dates = stock_data.index
 
         # Display the historical data
         st.markdown(f"### Historical Data for {stock}")
-        st.dataframe(stock_data)
+        st.dataframe(stock_data)  # Display the DataFrame directly
 
         # Get the appropriate model and look-back period
         model_lstm = models.get(stock)
